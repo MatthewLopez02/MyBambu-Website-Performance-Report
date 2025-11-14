@@ -800,9 +800,18 @@
                     <p class="section-subtitle">User interaction events tracked on website</p>
                 </div>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="buttonClicksChart"></canvas>
-            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Button Event Name</th>
+                        <th>Users</th>
+                        <th>Total Events</th>
+                    </tr>
+                </thead>
+                <tbody id="buttonClicksTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
 
         <!-- Campaign Performance -->
@@ -1167,48 +1176,6 @@
             }
         });
 
-        // Button Clicks Chart (Horizontal Bar)
-        const buttonsCtx = document.getElementById('buttonClicksChart').getContext('2d');
-        const buttonsChart = new Chart(buttonsCtx, {
-            type: 'bar',
-            data: {
-                labels: buttonClicks.labels,
-                datasets: [{
-                    label: 'Total Events',
-                    data: buttonClicks.events,
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderColor: '#667eea',
-                    borderWidth: 2,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {display: false},
-                    tooltip: {
-                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
-                        titleColor: '#FFFFFF',
-                        bodyColor: '#B3BAC5',
-                        borderColor: '#667eea',
-                        borderWidth: 1,
-                        padding: 12
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {color: 'rgba(45, 55, 72, 0.3)'},
-                        ticks: {color: '#B3BAC5'}
-                    },
-                    y: {
-                        grid: {display: false},
-                        ticks: {color: '#B3BAC5', font: {size: 11}}
-                    }
-                }
-            }
-        });
 
         // Engagement Chart (Line)
         const engagementCtx = document.getElementById('engagementChart').getContext('2d');
@@ -1355,6 +1322,18 @@
             });
         }
 
+        function populateButtonClicksTable() {
+            const tbody = document.getElementById('buttonClicksTable');
+            buttonClicks.labels.forEach((label, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="color: #4C9AFF;">${label}</td>
+                    <td>${buttonClicks.users[index].toLocaleString()}</td>
+                    <td>${buttonClicks.events[index].toLocaleString()}</td>
+                `;
+            });
+        }
+
         // Update timeline view function
         function updateTimelineView(view) {
             // Update button states
@@ -1381,6 +1360,7 @@
             populateTopPagesTable();
             populateTrafficSourceTable();
             populateDevicesTable();
+            populateButtonClicksTable();
             populateCampaignsTable();
         });
     </script>
