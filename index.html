@@ -651,6 +651,19 @@
             </div>
         </div>
 
+        <!-- Paid Landing Pages Traffic -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Paid Landing Pages Traffic</h2>
+                    <p class="section-subtitle">Daily visits to paid advertising landing pages</p>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="paidLandingsChart"></canvas>
+            </div>
+        </div>
+
         <!-- Key Insights -->
         <div class="insights-section">
             <h2 class="insights-title">📊 Key Insights & Findings</h2>
@@ -934,6 +947,15 @@
             {campaign: 'SEM Venezuela JUL', sessions: 7552, users: 6813, conversion: 90.2},
             {campaign: 'SEM BambuPay', sessions: 6024, users: 3965, conversion: 65.8}
         ];
+
+        // Source: Paid Landings_Visits per page.csv - Paid landing pages daily traffic
+        const paidLandingsData = {
+            dates: ["Sep 1","Sep 2","Sep 3","Sep 4","Sep 5","Sep 6","Sep 7","Sep 8","Sep 9","Sep 10","Sep 11","Sep 12","Sep 13","Sep 14","Sep 15","Sep 16","Sep 17","Sep 18","Sep 19","Sep 20","Sep 21","Sep 22","Sep 23","Sep 24","Sep 25","Sep 26","Sep 27","Sep 28","Sep 29","Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7","Oct 8","Oct 9","Oct 10","Oct 11","Oct 12","Oct 13","Oct 14","Oct 15","Oct 16","Oct 17","Oct 18","Oct 19","Oct 20","Oct 21","Oct 22","Oct 23","Oct 24","Oct 25","Oct 26","Oct 27","Oct 28","Oct 29","Oct 30","Oct 31"],
+            tarjeta: [14,13,8,2,10,8,13,10,8,18,15,6,4,9,12,12,7,9,9,13,4,20,5,6,10,3,8,9,7,5,5,6,5,7,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            recompensas: [4,1,1,2,7,5,8,11,8,4,5,1,0,1,2,2,7,2,3,5,2,4,0,1,0,2,1,1,6,3,1,1,2,3,4,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            imt: [2,1,1,1,2,3,1,1,1,2,0,0,1,0,0,1,2,1,0,3,0,1,1,1,0,0,1,0,0,0,0,0,1,2,2,0,0,1,0,0,0,0,0,4,1,1,0,1,0,0,1,1,0,1,1,0,1,1,0,1,1],
+            promociones: [0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        };
 
         // Chart configurations
         Chart.defaults.color = '#B3BAC5';
@@ -1259,6 +1281,151 @@
                         grid: {color: 'rgba(45, 55, 72, 0.3)'},
                         ticks: {
                             color: '#B3BAC5',
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Paid Landing Pages Traffic Chart
+        const paidLandingsCtx = document.getElementById('paidLandingsChart').getContext('2d');
+        const paidLandingsChart = new Chart(paidLandingsCtx, {
+            type: 'line',
+            data: {
+                labels: paidLandingsData.dates,
+                datasets: [
+                    {
+                        label: 'Tarjeta (Card)',
+                        data: paidLandingsData.tarjeta,
+                        borderColor: '#4C9AFF',
+                        backgroundColor: 'rgba(76, 154, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'Recompensas (Rewards)',
+                        data: paidLandingsData.recompensas,
+                        borderColor: '#36B37E',
+                        backgroundColor: 'rgba(54, 179, 126, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'IMT (International Money Transfer)',
+                        data: paidLandingsData.imt,
+                        borderColor: '#FFAB00',
+                        backgroundColor: 'rgba(255, 171, 0, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'Promociones (Promotions)',
+                        data: paidLandingsData.promociones,
+                        borderColor: '#FF5630',
+                        backgroundColor: 'rgba(255, 86, 48, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff',
+                            font: {
+                                size: 12
+                            },
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: '#4C9AFF',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' visits';
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 36,
+                                xMax: 36,
+                                borderColor: '#FF5630',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    content: 'Campaigns Stopped',
+                                    enabled: true,
+                                    position: 'top',
+                                    backgroundColor: 'rgba(255, 86, 48, 0.8)',
+                                    color: '#ffffff',
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff',
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Visits',
+                            color: '#ffffff',
+                            font: {
+                                size: 13
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#ffffff',
                             maxRotation: 45,
                             minRotation: 45
                         }
