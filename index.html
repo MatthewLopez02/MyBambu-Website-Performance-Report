@@ -638,6 +638,19 @@
             </div>
         </div>
 
+        <!-- Operating System Distribution -->
+        <div class="chart-section" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Operating System Distribution</h2>
+                    <p class="section-subtitle">Users by operating system</p>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="osChart"></canvas>
+            </div>
+        </div>
+
         <!-- Engagement Metrics -->
         <div class="chart-section">
             <div class="section-header">
@@ -852,7 +865,7 @@
     </div>
 
     <footer>
-        <p>MyBambu Website Performance Report | Generated: November 13, 2025</p>
+        <p>MyBambu Website Performance Report</p>
         <p style="margin-top: 10px; font-size: 0.85rem;">
             Data sources: Google Analytics 4, Looker Studio | Report Period: September 1 - October 31, 2025
         </p>
@@ -878,6 +891,12 @@
         const deviceData = {
             labels: ['Mobile', 'Tablet', 'Desktop', 'Smart TV'],
             sessions: [529534, 75653, 42340, 6]
+        };
+
+        // Source: Download (7).csv - Operating system distribution by users
+        const osData = {
+            labels: ['Android', 'iOS', 'Windows', 'Macintosh', 'Linux', 'Other'],
+            users: [566661, 481953, 24547, 2560, 2287, 620]
         };
 
         // Source: Download (5).csv - Top pages with engagement
@@ -1198,6 +1217,50 @@
             }
         });
 
+        // Operating System Chart (Pie)
+        const osCtx = document.getElementById('osChart').getContext('2d');
+        const osChart = new Chart(osCtx, {
+            type: 'pie',
+            data: {
+                labels: osData.labels,
+                datasets: [{
+                    data: osData.users,
+                    backgroundColor: ['#36B37E', '#667eea', '#FF991F', '#764ba2', '#6554C0', '#B3BAC5'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {size: 12},
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B3BAC5',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.toLocaleString() + ' users (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
         // Engagement Chart (Line)
         const engagementCtx = document.getElementById('engagementChart').getContext('2d');
